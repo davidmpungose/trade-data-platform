@@ -1,0 +1,54 @@
+.card-header {
+    color: white;
+    /* background: #2A2A2A !important; */
+}
+
+.navbar {
+    background: #323491 !important;
+    color: white !important;
+    font-weight: bold;
+
+}
+
+.nav-link.active span {
+            color: #ffcc00 !important;  /* Bright Gold for the active tab */
+            border-bottom: 2px solid #ffcc00; /* Optional underline */
+        }
+
+        /* 2. Change color of the text when hovering */
+        .nav-link:hover span {
+            color: #ffcc00 !important; /* Turquoise on hover */
+        }
+
+/* .navbar-brand { 
+    color: white !important;        
+    font-family:  Tahoma;
+            font-weight: bold;
+
+} */
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    background: #323491;
+    transition: 0.3s;
+}
+
+.shiny-image-output {
+    height: 40px !important;
+}
+
+.btn:hover {
+    background: #ffcc00;
+    color: #323491;
+    transition: 0.3s;
+}
+/* 
+.shiny-data-frame thead {
+    background-color: #212529 !important;
+    color: white !important;
+} */

@@ -12,7 +12,7 @@ import shinyswatch
 import io
 from shinyswatch import theme 
 
-data = pd.read_excel("C:/ERS/Statistics/Projects/Online Trade Data Platform/Test Data/Trade_2023_2025.xlsx"
+data = pd.read_excel("C:/ERS/Statistics/Projects/Online Trade Data Platform/pract_env/prac3/data/Trade_2023_2025.xlsx"
                             , sheet_name='test2')
 
 assets = Path(__file__).parent / "assets"

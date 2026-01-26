@@ -56,7 +56,7 @@ summary_page =     ui.page_fluid(
                     ui.input_selectize(  
         "monthly_partner",  
         "Select a Country",  
-        ['🇿🇦 Republic of South Africa', 'Mozambique', 'India', 'Zimbabwe',
+        ['Republic of South Africa', 'Mozambique', 'India', 'Zimbabwe',
           'Botswana', 'United Kingdom','United Arab Emirates'],  
         multiple=True,  
         selected='Total'
@@ -218,7 +218,7 @@ ui.row (
 
             ui.input_selectize("goods_search", "Search for Commodity",
                                multiple=True,
-                               selected="Petrol",
+                               selected="Still Wine",
                                choices=hs_dicts)
 
                       )    
@@ -268,7 +268,7 @@ ui.row (
                                style="color: white; font-weight: bold"), info_page),
           id="tabs",
           title= ui.span(
-            ui.img(src = "ers logo.png", width= "40px", height= "40px"),
+            ui.img(src = "C:/ERS/Statistics/Projects/Online Trade Data Platform/pract_env/prac3/assets/ers logo.png", width= "40px", height= "40px"),
               
               ui.span("Eswatini Merchandise Trade", style= "color: #ffcc00; padding-left: 10px"),
             ui.span(" Data Request Platform", style = "color: white")
@@ -328,12 +328,6 @@ def server(input, output, session):
         total = agg_filtered['SZLValue'].sum()
         return total
     
-    @reactive.calc
-    def commodity_filter():
-        commodity = req(input.goods_search())
-        commodity_data = data[data['HS_Section'].isin(commodity)]
-        return commodity_data
-    
     @render.text
     def total_trade_value():
         return f"E{total_trade():,.0f}"
@@ -357,7 +351,8 @@ def server(input, output, session):
         else:
             df = filtered_monthly[filtered_monthly['Flow'] == input.flow_filter()]
         month_orders = calendar.month_name[1:]
-        return px.bar(df, x='Month', y='SZLValue', category_orders = {'Month' : month_orders})
+        return px.bar(df, x='Month', y='SZLValue', category_orders = {'Month' : month_orders}, color="Flow"
+                      , barmode='group', color_discrete_map={"Imports": "#323491", "Exports": "#ffcc00"})
     
     @render_plotly
     def partner_trade():
@@ -368,7 +363,8 @@ def server(input, output, session):
         partner_filtered = patner_data[patner_data['Partner'].isin(input.partner_filter())]
         
         
-        return px.bar(partner_filtered, x='Partner', y='SZLValue', color='Flow', barmode='stack')
+        return px.bar(partner_filtered, x='Partner', y='SZLValue', color="Flow",
+                      barmode='group', color_discrete_map={"Imports": "#323491", "Exports": "#ffcc00"})
     
     @render.image
     def image():
@@ -379,6 +375,8 @@ def server(input, output, session):
     @render_plotly
     def plot1():
         df = data
+        
+        
         partner = df.groupby('Partner')['SZLValue'].sum().nlargest(input.n_partner()).reset_index()
 
         return px.bar(partner, x='Partner', y="SZLValue")
@@ -392,6 +390,13 @@ def server(input, output, session):
         fig.update_xaxes(tickangle=-45)
 
         return fig
+    
+    @reactive.calc
+    def commodity_filter():
+        commodity = req(input.goods_search())
+        commodity_data = data[data['HS8'].isin(commodity)]
+        return commodity_data
+    
     
     @render.data_frame
     def trade_df():

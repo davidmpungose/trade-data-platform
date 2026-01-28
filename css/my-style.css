@@ -1,3 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+}
+
+li {
+	list-style: none;
+}
+
+:root {
+	--poppins: 'Poppins', sans-serif;
+	--lato: 'Lato', sans-serif;
+}
+
 .card-header {
     color: white;
     /* background: #2A2A2A !important; */
@@ -20,12 +41,31 @@
             color: #ffcc00 !important; /* Turquoise on hover */
         }
 
-/* .navbar-brand { 
-    color: white !important;        
-    font-family:  Tahoma;
+.navbar-brand {         
+    font-family:  var(--poppins);
             font-weight: bold;
 
-} */
+}
+
+.card-header {
+    font-family: var(--poppins);
+    font-weight: bold;
+}
+
+.font-body {
+    font-family: var(--lato);
+}
+
+#year-selection {
+    /* width: 100%;
+	margin-bottom: 16px; */
+	background: #eee;
+	border-radius: 10px;
+	/* padding: 14px 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center; */
+}
 
 .btn {
     padding: 0.75rem 1.5rem;

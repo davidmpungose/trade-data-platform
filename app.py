@@ -1,6 +1,7 @@
 import plotly.express as px
 from pathlib import Path
 import calendar
+import faicons as fa
 import pandas as pd
 import matplotlib.pyplot as plt
 from bslib import bslib
@@ -17,30 +18,45 @@ data = pd.read_excel("C:/ERS/Statistics/Projects/Online Trade Data Platform/prac
 
 assets = Path(__file__).parent / "assets"
 
+ICONS = {
+    "taxi": fa.icon_svg("taxi"),
+    "truck": fa.icon_svg("truck"),
+    "ship": fa.icon_svg("ship"),
+}
+
 summary_page =     ui.page_fluid(
 
 
     ui.layout_column_wrap(
 
-        ui.input_select("tradebal_filter",
-                                     "Select Year",
-                                     ['2023','2024', '2025' ],)
+        ui.span(ui.input_select("tradebal_filter",
+                                     ui.span("Select Year",style="font-weight: bold; font-family: var(--poppins); color: #045fb0"),
+                                     ['2023','2024', '2025' ],), style="background: #eee; border-radius: 10px; padding: 14px 20px; display: flex")
 
         ,
-        ui.value_box(
-                    "Total Trade",
-                    ui.output_text("total_trade_value")
+        ui.value_box( ui.span(
+                    "Total Trade", class_="font-body", style="font-weight: bold"
+        ),
+                    ui.output_text("total_trade_value"),
+                    showcase=ICONS["truck"]
                 ),
 
 
                 ui.value_box(
-                 "Import Value",
-                    ui.output_text("total_import")
+                 ui.span(
+                  "Import Value", class_="font-body", style="font-weight: bold"   
+                 ),
+                 ui.span(
+                    ui.output_text("total_import"), class_="font-body" 
+                 ),
+                    
+                    showcase=ICONS["taxi"]
                 ),
-                ui.value_box(
-
-                    "Export Value",
-                    ui.output_text("total_export")
+                ui.value_box(ui.span(
+                    "Export Value", class_="font-body", style="font-weight: bold"
+        ),
+                    ui.output_text("total_export"),
+                    showcase=ICONS["ship"]
                 ),
 
                 fill= False,
@@ -109,7 +125,7 @@ info_page = ui.page_fluid(
             "It was set up through the Revenue Authority Act, 2008 (as amended). " \
             "The ERS works within the broad framework of Government but outside of the civil service." \
             "The ERS is structured" \
-            " as a corporate entity and strives for operational excellence and efficiency."),
+            " as a corporate entity and strives for operational excellence and efficiency." , class_="font-body"),
 
     ),
         ui.card(
@@ -122,6 +138,25 @@ info_page = ui.page_fluid(
             " numerical method of classifying traded products. It is used by countries" \
             " around the world to uniformly identify and describe products for purposes" \
             " such as assessing duties and gathering statistics."),
+            ui.tags.li(
+                ui.tags.a("HS 2022 Nomenclature", 
+                          href="https://www.wcoomd.org/en/topics/nomenclature/instrument-and-tools/hs-nomenclature-2022-edition/hs-nomenclature-2022-edition.aspx")
+                  )
+            )
+
+        ,
+         ui.card(
+
+                ui.card_header (
+                              ui.span("Basic Economic Categories Rev5 (BEC)", style="color: #2f2f31; font-weight: bold")
+                          )
+            ,
+           ui.p("The Classification by Broad Economic Categories (BEC) Revision 5 organizes goods into categories " \
+           "based on their main end-use (capital, intermediate, or consumption)"),
+
+           ui.tags.li( 
+               ui.tags.a("BEC Rev5 Documentation", href = "https://unstats.un.org/unsd/trade/classifications/Manual%20of%20the%20Fifth%20Revision%20of%20the%20BEC%20(Unedited).pdf")
+           )
 
         ),
 
@@ -147,6 +182,10 @@ info_page = ui.page_fluid(
             ,
            ui.p("The Standard International Trade Classification (SITC) organizes traded products into sections, divisions, groups, and " \
            "subgroups based on materials, manufacturing stage, and industrial use. "),
+
+           ui.tags.li(
+               ui.tags.a("SITC Rev4 Documentation", href = "https://unstats.un.org/unsd/trade/sitcrev4.htm")
+           )
         )
     ),
     )
@@ -185,12 +224,12 @@ app_ui = ui.page_fluid (
 
                       ui.card (
                           ui.card_header (
-                              ui.span("Refine Your Data Request", style="color: #2f2f31; font-weight: bold")
-                          ),
+                              ui.span("Refine Your Data Request", style="font-weight: bold; font-family: var(--poppins); color: #045fb0"))
+                          ,
                       ui.row (
                         
             ui.input_select("year_selection",
-                             "Select Year",
+                              ui.span("Select Year",),
                              ['2023','2024', '2025'],)
         ,
 

@@ -5,6 +5,7 @@ import faicons as fa
 import pandas as pd
 import matplotlib.pyplot as plt
 from bslib import bslib
+from shared import INPUTS
 from shiny import reactive
 from shiny import ui, App, render, Inputs, Outputs, Session, req
 from shinywidgets import render_plotly, output_widget
@@ -16,7 +17,11 @@ from shinyswatch import theme
 data = pd.read_excel("C:/ERS/Statistics/Projects/Online Trade Data Platform/pract_env/prac3/data/Trade_2023_2025.xlsx"
                             , sheet_name='test2')
 
-assets = Path(__file__).parent / "assets"
+assets_path = Path(__file__).parent / "www"
+logo_file = assets_path / "ers_logo.png"
+
+print(f"DEBUG: Looking for assets in: {assets_path}")
+print(f"DEBUG: Does the logo file exist? {logo_file.exists()}")
 
 ICONS = {
     "taxi": fa.icon_svg("taxi"),
@@ -114,23 +119,10 @@ summary_page =     ui.page_fluid(
 info_page = ui.page_fluid(
 
     ui.layout_columns(
-        ui.card(
 
-                ui.card_header (
-                              ui.span("About Us", style="color: #2f2f31; font-weight: bold")
-                          )
-
-            ,
-            ui.p("The Eswatini Revenue Service (ERS) is a semi-autonomous revenue administration agency. " \
-            "It was set up through the Revenue Authority Act, 2008 (as amended). " \
-            "The ERS works within the broad framework of Government but outside of the civil service." \
-            "The ERS is structured" \
-            " as a corporate entity and strives for operational excellence and efficiency." , class_="font-body"),
-
-    ),
         ui.card(
             ui.card_header(
-                ui.span("Harmonized System (HS) Codes", style="color: #2f2f31; font-weight: bold")
+                ui.span("Harmonized System (HS) Codes", style="font-weight: bold")
             ),
             ui.p("Among classification systems, Harmonized System (HS) codes " \
             "are commonly used throughout the import and export process for the" \
@@ -145,10 +137,27 @@ info_page = ui.page_fluid(
             )
 
         ,
+
+
+        ui.card(
+
+                ui.card_header (
+                              ui.span("Standard International Trade Classification Rev4 (SITC)", style="font-weight: bold")
+                          )
+            ,
+           ui.p("The Standard International Trade Classification (SITC) organizes traded products into sections, divisions, groups, and " \
+           "subgroups based on materials, manufacturing stage, and industrial use. "),
+
+           ui.tags.li(
+               ui.tags.a("SITC Rev4 Documentation", href = "https://unstats.un.org/unsd/trade/sitcrev4.htm")
+           )
+        ),
+
+        
          ui.card(
 
                 ui.card_header (
-                              ui.span("Basic Economic Categories Rev5 (BEC)", style="color: #2f2f31; font-weight: bold")
+                              ui.span("Basic Economic Categories Rev5 (BEC)", style="font-weight: bold")
                           )
             ,
            ui.p("The Classification by Broad Economic Categories (BEC) Revision 5 organizes goods into categories " \
@@ -164,29 +173,38 @@ info_page = ui.page_fluid(
     ),
 
     ui.layout_columns(
+
+    #     ui.card(
+
+    #             ui.card_header (
+    #                           ui.span("About Us", style="color: #2f2f31; font-weight: bold")
+    #                       )
+
+    #         ,
+    #         ui.p("The Eswatini Revenue Service (ERS) is a semi-autonomous revenue administration agency. " \
+    #         "It was set up through the Revenue Authority Act, 2008 (as amended). " \
+    #         "The ERS works within the broad framework of Government but outside of the civil service." \
+    #         "The ERS is structured" \
+    #         " as a corporate entity and strives for operational excellence and efficiency." , class_="font-body"),
+
+    # ),
         ui.card(
 
                 ui.card_header (
-                              ui.span("Basic Economic Categories Rev5 (BEC)", style="color: #2f2f31; font-weight: bold")
+                              ui.span("Special Data Request", style="font-weight: bold")
                           )
             ,
-           ui.p("The Classification by Broad Economic Categories (BEC) Revision 5 organizes goods into categories " \
-           "based on their main end-use (capital, intermediate, or consumption)"),
-
+           INPUTS['name'],
+           INPUTS['surname'],
+              INPUTS['institution'],
+              INPUTS['email'],
+              INPUTS['request details'],
+        ui.div(
+            ui.input_action_button("submit_request", "Submit Request", class_="btn"),
+            class_ = "d-flex justify-content-center"
         ),
-        ui.card(
-
-                ui.card_header (
-                              ui.span("Standard International Trade Classification Rev4 (SITC)", style="color: #2f2f31; font-weight: bold")
-                          )
-            ,
-           ui.p("The Standard International Trade Classification (SITC) organizes traded products into sections, divisions, groups, and " \
-           "subgroups based on materials, manufacturing stage, and industrial use. "),
-
-           ui.tags.li(
-               ui.tags.a("SITC Rev4 Documentation", href = "https://unstats.un.org/unsd/trade/sitcrev4.htm")
-           )
-        )
+        class_="request-card"),
+        
     ),
     )
 
@@ -228,20 +246,24 @@ app_ui = ui.page_fluid (
                           ,
                       ui.row (
                         
-            ui.input_select("year_selection",
+            
+                 
+                 ui.input_select("year_selection",
                               ui.span("Select Year",),
-                             ['2023','2024', '2025'],)
-        ,
+                             ['2023','2024', '2025']),
+                             
+        
 
             ui.input_select("trade_flow_selection",
                              "Select Trade Flow",
-                             ['Total', 'Imports', 'Exports']),
+                             ['Total', 'Imports', 'Exports']
+                      ),
 
              ui.input_select("partner_selection",
                              "Search Trade Partner",
                              ['ZA : Republic of South Africa', 'BE : Belgium', 'IT : Italy', 'ZW : Zimbabwe',
-          'BW : Botswana', 'GB : United Kingdom','KE : Kenya'],)
-                             
+          'BW : Botswana', 'GB : United Kingdom','KE : Kenya']),
+          
                       ),
 
 
@@ -275,7 +297,6 @@ ui.row (
                          
                 id="download_excel",
                 label="Download Data",
-                class_="btn-success",
                 style="margin-top: 20px;",
             ),
 
@@ -313,18 +334,19 @@ ui.row (
                                style="color: white; font-weight: bold"), info_page),
           id="tabs",
           title= ui.span(
-            ui.img(src = "ers logo.png", width= "40px", height= "40px"),
+            ui.img(src = "logo.png", width= "50px", height= "50px"),
               
               ui.span("Eswatini Merchandise Trade", style= "color: #ffcc00; padding-left: 10px"),
             ui.span(" Data Request Platform", style = "color: white")
           ),
+          
           # The footer argument accepts any UI elements
     footer=ui.div(
         ui.hr(),  # A horizontal line to separate content from footer
         ui.p("© 2026 Eswatini Revenue Service | Statistics Department", 
              style="text-align: center; background: #323491; color: white; padding: 20px;"),
         
-    )   
+    )  
 
           )
 
@@ -421,17 +443,17 @@ def server(input, output, session):
     def plot1():
         df = data
 
-
+        
         partner = df.groupby('Partner')['SZLValue'].sum().nlargest(input.n_partner()).reset_index()
 
-        return px.bar(partner, x='Partner', y="SZLValue")
+        return px.bar(partner, x='Partner', y="SZLValue", color_discrete_sequence=['#323491'])
 
     @render_plotly
     def plot2():
         df = data
         partner = df.groupby('Lib_Section')['SZLValue'].sum().nlargest(input.n_commodity()).reset_index()
 
-        fig = px.bar(partner, x='Lib_Section', y="SZLValue")
+        fig = px.bar(partner, x='Lib_Section', y="SZLValue" ,color_discrete_sequence=['#323491'])
         fig.update_xaxes(tickangle=-45)
 
         return fig

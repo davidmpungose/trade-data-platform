@@ -20,7 +20,9 @@ li {
 }
 
 .card-header {
-    color: white;
+    color: #045fb0 !important;
+    background: #eee !important;
+    
     /* background: #2A2A2A !important; */
 }
 
@@ -50,6 +52,7 @@ li {
 .card-header {
     font-family: var(--poppins);
     font-weight: bold;
+    color: #045fb0 !important;
 }
 
 .font-body {
@@ -65,6 +68,44 @@ li {
 	display: flex;
 	justify-content: space-between;
 	align-items: center; */
+}
+
+.request-card {
+    align-self: center;
+    width: 60%;
+    overflow-y: auto;
+
+    .shiny-input-container {
+        width: 80% !important;
+        border-right: #d64040 10px solid !important;
+        align-self: center;
+
+    }
+}
+
+.table-filters {
+    width: 100%;
+
+    
+}
+
+.shiny-input-container {
+    background: #eee !important;
+    border-right: #ffcc00 10px solid !important;
+    border-radius: 10px;
+	padding: 14px 15px;
+    margin-left: 10px;
+    margin-right: 20px;
+    width: auto;
+
+
+    .control-label {
+        font-weight: bold;
+        font-family: var(--lato);
+        color: #045fb0;
+    }
+	
+
 }
 
 .btn {

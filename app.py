@@ -18,7 +18,7 @@ data = pd.read_excel("C:/ERS/Statistics/Projects/Online Trade Data Platform/prac
                             , sheet_name='test2')
 
 assets_path = Path(__file__).parent / "www"
-logo_file = assets_path / "ers_logo.png"
+logo_file = assets_path / "test.jpg"
 
 print(f"DEBUG: Looking for assets in: {assets_path}")
 print(f"DEBUG: Does the logo file exist? {logo_file.exists()}")
@@ -191,7 +191,7 @@ info_page = ui.page_fluid(
         ui.card(
 
                 ui.card_header (
-                              ui.span("Special Data Request", style="font-weight: bold")
+                              ui.span("Submit Special Data Request", style="font-weight: bold")
                           )
             ,
            INPUTS['name'],
@@ -314,6 +314,13 @@ ui.row (
                 style="margin-top: 20px;",
             ),
 
+            ui.input_action_button(
+                id="btn4",
+                label="Make Special Request",
+                class_="btn-success",
+                style="margin-top: 20px;",
+            ),
+
             ui.br(),
             ui.br(),
             
@@ -331,10 +338,11 @@ ui.row (
                 
             ),
             ui.nav_panel ( ui.span("Info Page",
-                               style="color: white; font-weight: bold"), info_page),
+                               style="color: white; font-weight: bold"), info_page,
+                               value="info_page"),
           id="tabs",
           title= ui.span(
-            ui.img(src = "logo.png", width= "50px", height= "50px"),
+            ui.img(src = str(assets_path), width= "50px", height= "50px"),
               
               ui.span("Eswatini Merchandise Trade", style= "color: #ffcc00; padding-left: 10px"),
             ui.span(" Data Request Platform", style = "color: white")
@@ -406,6 +414,11 @@ def server(input, output, session):
     @render.text
     def total_export():
         return f"E{export_value():,.0f}"
+    
+    @reactive.effect
+    @reactive.event(input.btn4)
+    def switch_to_info():
+        ui.update_navset("tabs", selected="info_page")
 
     @render_plotly
     def monthly_trade():
